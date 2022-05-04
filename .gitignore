@@ -1,0 +1,13 @@
+﻿/.idea/
+/.vs
+[Bb]uild
+[Dd]ebug
+[Rr]elease
+[Tt]est
+[Ll]og[s]?
+[Tt]mp
+[Bb]in
+[Oo]bj
+local.settings.json
+*.user
+*.suo
