@@ -1,9 +1,11 @@
 using FastEndpoints;
 using Humanizer;
 using MessagingApp.Api.Authorization;
+using MessagingApp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -57,6 +59,15 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+
+builder.Services.AddDbContext<AppDbContext>((sp, options) =>
+{
+    var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+    var connectionString = builder.Configuration.GetConnectionString("DbConnection") ??
+                           throw new Exception("Connection string not properly configured");
+    options.UseSqlServer(connectionString);
+    options.UseLoggerFactory(loggerFactory);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -68,7 +79,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseHttpLogging();
-app.UseRouting();
 app.UseAuthentication();
+app.UseRouting();
+app.UseAuthorization();
 app.UseFastEndpoints(options => { options.RoutingOptions = routes => routes.Prefix = "api"; });
 app.Run();

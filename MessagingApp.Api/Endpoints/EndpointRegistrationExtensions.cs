@@ -5,7 +5,7 @@ public static class EndpointRegistrationExtensions
     public static void UseAppEndpoints(this WebApplication app)
     {
         // get clients
-        app.MapGet("api/v1/clients", () => new string[] { "Gerald", "Chifanzwa" });
+        app.MapGet("api/v1/clients", () => new[] { "Gerald", "Chifanzwa" });
 
         // get client by id
         app.MapGet("api/v1/clients/{id}", () => Results.Ok());
@@ -21,7 +21,7 @@ public static class EndpointRegistrationExtensions
 
 
         // get campaigns
-        app.MapGet("api/v1/clients/{clientId}/campaigns", () => new string[] { "Gerald", "Chifanzwa" });
+        app.MapGet("api/v1/clients/{clientId}/campaigns", () => new[] { "Gerald", "Chifanzwa" });
         
         // get campaign by id
         app.MapGet("api/v1/clients/{clientId}/campaigns/{id}", () => Results.Ok());
@@ -43,6 +43,6 @@ public static class EndpointRegistrationExtensions
         app.MapDelete("api/v1/schedules/{id}", () => Results.Ok()).RequireAuthorization();
         
         // get schedules
-        app.MapGet("api/v1/schedules", () => new string[] { "Gerald", "Chifanzwa" });
+        app.MapGet("api/v1/schedules", () => new[] { "Gerald", "Chifanzwa" });
     }
 }
