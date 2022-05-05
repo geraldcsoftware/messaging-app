@@ -2,5 +2,5 @@
 
 public class PagingOptions
 {
-    public int DefaultPageSize { get; set; }
+    public int DefaultPageSize { get; set; } = 10;
 }

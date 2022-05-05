@@ -14,6 +14,8 @@ services:
       ASPNETCORE_URLS: http://+:80
       CONNECTIONSTRINGS__DBCONNECTION: Server=messagingapp.database;Port=5432;Database=${POSTGRES_DB};User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
       DBPROVIDER: Postgres
+      PAGING__DEFAULTPAGESIZE: 50
+      
       TZ: Asia/Dubai
     ports:
       - "7500:80"

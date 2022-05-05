@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Humanizer;
 using MessagingApp.Api.Authorization;
+using MessagingApp.Api.Configuration;
 using MessagingApp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -59,6 +60,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.Configure<PagingOptions>(builder.Configuration.GetSection("Paging"));
 builder.Services.AddDbContext<AppDbContext>((sp, options) =>
 {
     var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
@@ -76,6 +78,7 @@ builder.Services.AddDbContext<AppDbContext>((sp, options) =>
 
     options.UseLoggerFactory(loggerFactory);
 });
+builder.Services.AddTransient<IIdGenerator, RandomIdGenerator>();
 
 var app = builder.Build();
 

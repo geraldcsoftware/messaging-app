@@ -4,14 +4,6 @@ public static class EndpointRegistrationExtensions
 {
     public static void UseAppEndpoints(this WebApplication app)
     {
-        // get clients
-        app.MapGet("api/v1/clients", () => new[] { "Gerald", "Chifanzwa" });
-
-        // get client by id
-        app.MapGet("api/v1/clients/{id}", () => Results.Ok());
-
-        // create client
-        app.MapPost("api/v1/clients", () => Results.Ok()).RequireAuthorization();
 
         // edit client
         app.MapPut("api/v1/clients/{id}", () => Results.Ok()).RequireAuthorization();

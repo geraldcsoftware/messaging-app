@@ -31,6 +31,7 @@ public class GetClientsEndpoint : EndpointWithoutRequest<PagedCollection<ClientV
         var pageSize = Query<int?>("pageSize", false) ?? _pagingOptions.Value.DefaultPageSize;
 
         var count = await _dbContext.Clients.CountAsync(ct);
+        var totalPages=count == 0 ? 0 :  (int)Math.Ceiling( (double)count / pageSize);
         var items = await _dbContext.Clients
                                     .AsNoTracking()
                                     .OrderBy(c => c.Name)
@@ -46,7 +47,7 @@ public class GetClientsEndpoint : EndpointWithoutRequest<PagedCollection<ClientV
             PageSize = pageSize,
             Items = items,
             TotalItems = count,
-            TotalPages = count == 0 ? 0 : (int)Math.Ceiling((double)count / pageSize)
+            TotalPages = totalPages
         };
     }
 }

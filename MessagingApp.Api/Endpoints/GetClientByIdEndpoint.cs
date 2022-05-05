@@ -16,8 +16,7 @@ public class GetClientByIdEndpoint : EndpointWithoutRequest<ClientViewModel>
     {
         _dbContext = dbContext;
     }
-
-
+    
     public override async Task HandleAsync(CancellationToken ct)
     {
         var clientId = Route<string>("id");
