@@ -18,6 +18,7 @@ builder.Host.UseSerilog((context, config) =>
                            outputTemplate:
                            "{Timestamp:HH:mm:ss} [{Level} - {SourceContext}] {Message}{NewLine}{Exception}");
 });
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -40,7 +41,6 @@ builder.Services.AddHttpLogging(options =>
 });
 
 builder.Services.AddFastEndpoints();
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
        .AddJwtBearer(options =>
         {
@@ -59,7 +59,6 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-
 builder.Services.AddDbContext<AppDbContext>((sp, options) =>
 {
     var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
@@ -68,6 +67,7 @@ builder.Services.AddDbContext<AppDbContext>((sp, options) =>
     options.UseSqlServer(connectionString);
     options.UseLoggerFactory(loggerFactory);
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -83,4 +83,5 @@ app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
 app.UseFastEndpoints(options => { options.RoutingOptions = routes => routes.Prefix = "api"; });
-app.Run();
+
+await app.RunAsync();

@@ -22,7 +22,9 @@ public class GetClientByIdEndpoint : EndpointWithoutRequest<ClientViewModel>
     {
         var clientId = Route<string>("id");
 
-        var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == clientId, ct);
+        var client = await _dbContext.Clients
+                                     .AsNoTracking()
+                                     .FirstOrDefaultAsync(c => c.Id == clientId, ct);
 
         if (client is null) await SendNotFoundAsync(ct);
         else await SendAsync(client.Adapt<ClientViewModel>(), cancellation: ct);

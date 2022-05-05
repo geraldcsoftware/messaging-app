@@ -1,16 +1,21 @@
 ﻿using FastEndpoints;
+using Mapster;
 using MessagingApp.Api.Configuration;
 using MessagingApp.Api.ViewModels;
+using MessagingApp.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace MessagingApp.Api.Endpoints;
 
 public class GetClientsEndpoint : EndpointWithoutRequest<PagedCollection<ClientViewModel>>
 {
+    private readonly AppDbContext _dbContext;
     private readonly IOptions<PagingOptions> _pagingOptions;
 
-    public GetClientsEndpoint(IOptions<PagingOptions> pagingOptions)
+    public GetClientsEndpoint(AppDbContext dbContext, IOptions<PagingOptions> pagingOptions)
     {
+        _dbContext = dbContext;
         _pagingOptions = pagingOptions;
     }
 
@@ -25,14 +30,23 @@ public class GetClientsEndpoint : EndpointWithoutRequest<PagedCollection<ClientV
         var page = Query<int?>("page", false)         ?? 1;
         var pageSize = Query<int?>("pageSize", false) ?? _pagingOptions.Value.DefaultPageSize;
 
-        await Task.Delay(01, ct);
-        return new PagedCollection<ClientViewModel>
+        var count = await _dbContext.Clients.CountAsync(ct);
+        var items = await _dbContext.Clients
+                                    .AsNoTracking()
+                                    .OrderBy(c => c.Name)
+                                    .ThenBy(c => c.Created)
+                                    .Skip((page - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ProjectToType<ClientViewModel>()
+                                    .ToListAsync(ct);
+
+        return new()
         {
             Page = page,
             PageSize = pageSize,
-            Items = Array.Empty<ClientViewModel>(),
-            TotalItems = 0,
-            TotalPages = 0
+            Items = items,
+            TotalItems = count,
+            TotalPages = (int)Math.Ceiling((double)count / pageSize)
         };
     }
 }
