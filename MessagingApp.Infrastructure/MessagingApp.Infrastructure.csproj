@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="microsoft.entityframeworkcore.relational" Version="6.0.4" />
+      <PackageReference Include="microsoft.entityframeworkcore.relational" Version="7.0.0-preview.3.22175.1" />
     </ItemGroup>
 
 </Project>

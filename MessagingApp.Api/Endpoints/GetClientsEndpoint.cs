@@ -46,7 +46,7 @@ public class GetClientsEndpoint : EndpointWithoutRequest<PagedCollection<ClientV
             PageSize = pageSize,
             Items = items,
             TotalItems = count,
-            TotalPages = (int)Math.Ceiling((double)count / pageSize)
+            TotalPages = count == 0 ? 0 : (int)Math.Ceiling((double)count / pageSize)
         };
     }
 }

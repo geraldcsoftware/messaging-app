@@ -64,7 +64,16 @@ builder.Services.AddDbContext<AppDbContext>((sp, options) =>
     var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
     var connectionString = builder.Configuration.GetConnectionString("DbConnection") ??
                            throw new Exception("Connection string not properly configured");
-    options.UseSqlServer(connectionString);
+    switch (builder.Configuration["DbProvider"])
+    {
+        case "Postgres":
+            options.UseNpgsql(connectionString);
+            break;
+        default:
+            options.UseSqlServer(connectionString);
+            break;
+    }
+
     options.UseLoggerFactory(loggerFactory);
 });
 
@@ -77,11 +86,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseHttpLogging();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
 app.UseFastEndpoints(options => { options.RoutingOptions = routes => routes.Prefix = "api"; });
 
-await app.RunAsync();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.EnsureCreatedAsync();
+}
+
+app.Run();

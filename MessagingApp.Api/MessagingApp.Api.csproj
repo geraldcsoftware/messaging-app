@@ -11,14 +11,15 @@
 
   <ItemGroup>
     <PackageReference Include="fastendpoints" Version="4.1.0" />
-    <PackageReference Include="fluentvalidation" Version="10.4.0" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.4.0" />
+    <PackageReference Include="fluentvalidation" Version="11.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.0" />
     <PackageReference Include="humanizer.core" Version="2.14.1" />
     <PackageReference Include="mapster" Version="7.3.0" />
-    <PackageReference Include="microsoft.aspnetcore.authentication.jwtbearer" Version="6.0.4" />
+    <PackageReference Include="microsoft.aspnetcore.authentication.jwtbearer" Version="7.0.0-preview.3.22178.4" />
     <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="6.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-preview.3" />
     <PackageReference Include="serilog.aspnetcore" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
   </ItemGroup>
 
   <ItemGroup>

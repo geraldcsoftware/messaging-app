@@ -11,3 +11,4 @@
 local.settings.json
 *.user
 *.suo
+.env
