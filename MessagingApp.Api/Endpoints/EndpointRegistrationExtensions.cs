@@ -4,10 +4,7 @@ public static class EndpointRegistrationExtensions
 {
     public static void UseAppEndpoints(this WebApplication app)
     {
-
-        // edit client
-        app.MapPut("api/v1/clients/{id}", () => Results.Ok()).RequireAuthorization();
-
+        
         // delete client
         app.MapDelete("api/v1/clients/{id}", () => Results.Ok()).RequireAuthorization();
 
