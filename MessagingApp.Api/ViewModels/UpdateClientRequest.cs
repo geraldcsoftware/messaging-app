@@ -2,7 +2,7 @@
 
 namespace MessagingApp.Api.ViewModels;
 
-public class UpdateClientViewModel
+public class UpdateClientRequest
 {
     [FromRoute(Name =  "id")]
     public string? Id { get; set; }

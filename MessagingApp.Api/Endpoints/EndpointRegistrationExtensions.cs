@@ -4,11 +4,9 @@ public static class EndpointRegistrationExtensions
 {
     public static void UseAppEndpoints(this WebApplication app)
     {
+
         
-        // delete client
-        app.MapDelete("api/v1/clients/{id}", () => Results.Ok()).RequireAuthorization();
-
-
+        
         // get campaigns
         app.MapGet("api/v1/clients/{clientId}/campaigns", () => new[] { "Gerald", "Chifanzwa" });
         

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MessagingApp.Api.Endpoints;
 
-public class UpdateClientEndpoint : Endpoint<UpdateClientViewModel, ClientViewModel>
+public class UpdateClientEndpoint : Endpoint<UpdateClientRequest, ClientViewModel>
 {
     private readonly AppDbContext _dbContext;
     private readonly ILogger<UpdateClientEndpoint> _logger;
@@ -22,7 +22,7 @@ public class UpdateClientEndpoint : Endpoint<UpdateClientViewModel, ClientViewMo
         Put("clients/{id}");
     }
 
-    public override async Task HandleAsync(UpdateClientViewModel req, CancellationToken ct)
+    public override async Task HandleAsync(UpdateClientRequest req, CancellationToken ct)
     {
         var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == req.Id, ct);
         if (client is null)
