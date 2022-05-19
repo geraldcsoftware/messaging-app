@@ -1,17 +1,48 @@
 ﻿using FastEndpoints;
+using MapsterMapper;
 using MessagingApp.Api.ViewModels;
+using MessagingApp.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace MessagingApp.Api.Endpoints;
 
-public class UpdateCampaignRequest : Endpoint<UpdateCampaignRequest, CampaignViewModel>
+public class UpdateCampaignEndpoint : Endpoint<UpdateCampaignRequest, CampaignViewModel>
 {
-    public override void Configure()
+    private readonly AppDbContext _dbContext;
+    private readonly IMapper _mapper;
+    private readonly ILogger<UpdateCampaignEndpoint> _logger;
+
+    public UpdateCampaignEndpoint(AppDbContext dbContext,
+                                  IMapper mapper,
+                                  ILogger<UpdateCampaignEndpoint> logger)
     {
-        Put("clients/{clientId}/campaigns");
+        _dbContext = dbContext;
+        _mapper = mapper;
+        _logger = logger;
     }
 
-    public override Task HandleAsync(UpdateCampaignRequest req, CancellationToken ct)
+    public override void Configure()
     {
-        return base.HandleAsync(req, ct);
+        Put("clients/{clientId}/campaigns/{id}");
+    }
+
+    public override async Task HandleAsync(UpdateCampaignRequest req, CancellationToken ct)
+    {
+        var campaign = await _dbContext.Campaigns.FirstOrDefaultAsync(c => c.Id == req.Id, cancellationToken: ct);
+
+        if (campaign is null)
+        {
+            _logger.LogWarning("Update campaign failed. Campaign not found. Request -> {@Request}", req);
+            await SendNotFoundAsync(ct);
+            return;
+        }
+
+        campaign.Name = req.Name;
+        campaign.Template = req.Template;
+
+        await _dbContext.SaveChangesAsync(ct);
+        _logger.LogInformation("Campaign updated. {@Campaign}", campaign);
+
+        await SendOkAsync(_mapper.Map<CampaignViewModel>(campaign), ct);
     }
 }
