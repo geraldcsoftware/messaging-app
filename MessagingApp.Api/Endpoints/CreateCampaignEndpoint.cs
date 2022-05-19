@@ -44,7 +44,8 @@ public class CreateCampaignEndpoint : EndpointWithMapping<CreateCampaignRequest,
         Id = _idGenerator.NewId(),
         Name = r.Name,
         Template = r.MessageTemplate,
-        ClientId = r.ClientId
+        ClientId = r.ClientId,
+        Created = DateTime.UtcNow
     };
 
     public override CampaignViewModel MapFromEntity(MessageCampaign e)
@@ -54,7 +55,7 @@ public class CreateCampaignEndpoint : EndpointWithMapping<CreateCampaignRequest,
             Id = e.Id,
             Name = e.Name,
             MessageTemplate = e.Template,
-            Created = DateTime.UtcNow,
+            Created = DateTime.SpecifyKind(e.Created, DateTimeKind.Utc),
             Active = false,
             ClientId = e.ClientId,
         };

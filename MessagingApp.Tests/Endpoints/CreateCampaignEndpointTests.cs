@@ -18,13 +18,13 @@ using System.Net;
 
 using Xunit.Abstractions;
 
-public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<CreateCampaignEndpoint>>
+public class CreateCampaignEndpointTests : IClassFixture<ApplicationFactory>
 {
     private readonly WebApplicationFactory<CreateCampaignEndpoint> _factory;
 
     private readonly ITestOutputHelper _outputHelper;
 
-    public CreateCampaignEndpointTests(WebApplicationFactory<CreateCampaignEndpoint> factory,
+    public CreateCampaignEndpointTests(ApplicationFactory factory,
                                        ITestOutputHelper outputHelper)
     {
         _factory = factory;
@@ -42,16 +42,6 @@ public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<C
         {
             builder.ConfigureTestServices(services =>
             {
-                services.AddInMemoryDatabase();
-                services.AddAuthentication(TestAuthenticationScheme.AuthenticationScheme)
-                        .AddScheme<TestAuthenticationSchemeOptions,
-                             TestAuthenticationSchemeHandler>(TestAuthenticationScheme.AuthenticationScheme,
-                                                              options =>
-                                                              {
-                                                                  options.TestClaims.Add(new("ClientId", "101"));
-                                                                  options.TestClaims.Add(new("ApplicationId", "Test"));
-                                                              });
-
                 using var scope = services.BuildServiceProvider().CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 dbContext.Clients.Add(new Client { Id = "101", Name = "Test Client" });
@@ -100,23 +90,7 @@ public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<C
         var idGenerator = new Mock<IIdGenerator>();
         idGenerator.Setup(x => x.NewId()).Returns(Guid.NewGuid().ToString());
 
-        var factory = _factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureTestServices(services =>
-            {
-                services.AddInMemoryDatabase();
-                services.AddAuthentication(TestAuthenticationScheme.AuthenticationScheme)
-                        .AddScheme<TestAuthenticationSchemeOptions,
-                             TestAuthenticationSchemeHandler>(TestAuthenticationScheme.AuthenticationScheme,
-                                                              options =>
-                                                              {
-                                                                  options.TestClaims.Add(new("ClientId", "101"));
-                                                                  options.TestClaims.Add(new("ApplicationId", "Test"));
-                                                              });
-            });
-        });
-
-        var httpClient = factory.CreateClient();
+        var httpClient = _factory.CreateClient();
         httpClient.DefaultRequestHeaders.Add("Authorization", $"{TestAuthenticationScheme.AuthenticationScheme} SomeToken");
         var request = $$"""
                       {

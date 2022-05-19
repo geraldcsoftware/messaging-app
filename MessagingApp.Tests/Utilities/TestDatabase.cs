@@ -12,6 +12,7 @@ public static class TestDatabase
         var registeredOptions = services.FirstOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
         if (registeredOptions != null) services.Remove(registeredOptions);
 
-        services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+        var dbName = Guid.NewGuid().ToString();
+        services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(dbName));
     }
 }
