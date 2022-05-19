@@ -4,6 +4,7 @@ public class CampaignViewModel
 {
     public string? Id { get; set; }
     public DateTime Created { get; set; }
+    public string? ClientId { get; set; }
     public string? Name { get; set; }
     public string? MessageTemplate { get; set; }
     public bool Active { get; set; }

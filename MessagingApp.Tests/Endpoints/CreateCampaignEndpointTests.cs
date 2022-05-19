@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using FluentAssertions;
 using MessagingApp.Api.Endpoints;
 using MessagingApp.Api.ViewModels;
@@ -52,17 +53,18 @@ public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<C
         var httpClient = factory.CreateClient();
         httpClient.DefaultRequestHeaders.Add("Authorization",
                                              $"{TestAuthenticationScheme.AuthenticationScheme} SomeToken");
-        var request = new CreateCampaignRequest
+        const string request = """"
         {
-            ClientId = "101",
-            Name = "Test Campaign",
-            MessageTemplate = "This is a test message template",
-            PlaceHolders = { "FirstName", "LastName" }
-        };
+            "name": "Test Campaign",
+            "messageTemplate": "This is a test message template",
+            "placeHolders":[ "FirstName", "LastName"]
+        }
+        """";
+        var requestContent = new StringContent(request, Encoding.UTF8, "application/json");
 
         // Act
 
-        var response = await httpClient.PostAsJsonAsync($"/api/clients/101/campaigns", request);
+        var response = await httpClient.PostAsync($"/api/clients/101/campaigns", requestContent);
         var result = response.IsSuccessStatusCode
                          ? await response.Content.ReadFromJsonAsync<CampaignViewModel>()
                          : null;
@@ -71,7 +73,8 @@ public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<C
         response.IsSuccessStatusCode.Should().BeTrue();
         result.Should().NotBeNull();
         result!.Id.Should().NotBeNullOrEmpty();
-        result.Name.Should().Be(request.Name);
-        result.MessageTemplate.Should().Be(request.MessageTemplate);
+        result.Name.Should().Be("Test Campaign");
+        result.MessageTemplate.Should().Be("This is a test message template");
+        result.ClientId.Should().Be("101");
     }
 }

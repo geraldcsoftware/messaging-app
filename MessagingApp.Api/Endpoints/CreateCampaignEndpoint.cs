@@ -11,7 +11,7 @@ public class CreateCampaignEndpoint : EndpointWithMapping<CreateCampaignRequest,
     private readonly IIdGenerator _idGenerator;
     private readonly ILogger<CreateCampaignEndpoint> _logger;
 
-    public CreateCampaignEndpoint(AppDbContext dbContext, 
+    public CreateCampaignEndpoint(AppDbContext dbContext,
                                   IIdGenerator idGenerator,
                                   ILogger<CreateCampaignEndpoint> logger)
     {
@@ -43,7 +43,8 @@ public class CreateCampaignEndpoint : EndpointWithMapping<CreateCampaignRequest,
     {
         Id = _idGenerator.NewId(),
         Name = r.Name,
-        Template = r.MessageTemplate
+        Template = r.MessageTemplate,
+        ClientId = r.ClientId
     };
 
     public override CampaignViewModel MapFromEntity(MessageCampaign e)
@@ -52,7 +53,10 @@ public class CreateCampaignEndpoint : EndpointWithMapping<CreateCampaignRequest,
         {
             Id = e.Id,
             Name = e.Name,
-            MessageTemplate = e.Template
+            MessageTemplate = e.Template,
+            Created = DateTime.UtcNow,
+            Active = false,
+            ClientId = e.ClientId,
         };
     }
 }
