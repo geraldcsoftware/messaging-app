@@ -14,13 +14,21 @@ using Moq;
 
 namespace MessagingApp.Tests.Endpoints;
 
+using System.Net;
+
+using Xunit.Abstractions;
+
 public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<CreateCampaignEndpoint>>
 {
     private readonly WebApplicationFactory<CreateCampaignEndpoint> _factory;
 
-    public CreateCampaignEndpointTests(WebApplicationFactory<CreateCampaignEndpoint> factory)
+    private readonly ITestOutputHelper _outputHelper;
+
+    public CreateCampaignEndpointTests(WebApplicationFactory<CreateCampaignEndpoint> factory,
+                                       ITestOutputHelper outputHelper)
     {
         _factory = factory;
+        _outputHelper = outputHelper;
     }
 
     [Fact]
@@ -41,6 +49,7 @@ public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<C
                                                               options =>
                                                               {
                                                                   options.TestClaims.Add(new("ClientId", "101"));
+                                                                  options.TestClaims.Add(new("ApplicationId", "Test"));
                                                               });
 
                 using var scope = services.BuildServiceProvider().CreateScope();
@@ -64,7 +73,7 @@ public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<C
 
         // Act
 
-        var response = await httpClient.PostAsync($"/api/clients/101/campaigns", requestContent);
+        var response = await httpClient.PostAsync("/api/clients/101/campaigns", requestContent);
         var result = response.IsSuccessStatusCode
                          ? await response.Content.ReadFromJsonAsync<CampaignViewModel>()
                          : null;
@@ -76,5 +85,55 @@ public class CreateCampaignEndpointTests : IClassFixture<WebApplicationFactory<C
         result.Name.Should().Be("Test Campaign");
         result.MessageTemplate.Should().Be("This is a test message template");
         result.ClientId.Should().Be("101");
+    }
+
+    [Theory]
+    [InlineData("", "Some Value")]
+    [InlineData(null, "Some Value")]
+    [InlineData(" ", "Some Value")]
+    [InlineData("Some Value", "")]
+    [InlineData("Some Value", null)]
+    [InlineData("Some Value", " ")]
+    public async Task CreateCampaign_WhenInvalidDataIsPassed_ShouldReturnBadRequest(string? name, string? messageTemplate)
+    {
+        // Arrange
+        var idGenerator = new Mock<IIdGenerator>();
+        idGenerator.Setup(x => x.NewId()).Returns(Guid.NewGuid().ToString());
+
+        var factory = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddInMemoryDatabase();
+                services.AddAuthentication(TestAuthenticationScheme.AuthenticationScheme)
+                        .AddScheme<TestAuthenticationSchemeOptions,
+                             TestAuthenticationSchemeHandler>(TestAuthenticationScheme.AuthenticationScheme,
+                                                              options =>
+                                                              {
+                                                                  options.TestClaims.Add(new("ClientId", "101"));
+                                                                  options.TestClaims.Add(new("ApplicationId", "Test"));
+                                                              });
+            });
+        });
+
+        var httpClient = factory.CreateClient();
+        httpClient.DefaultRequestHeaders.Add("Authorization", $"{TestAuthenticationScheme.AuthenticationScheme} SomeToken");
+        var request = $$"""
+                      {
+                        "name": "{{name}}",
+                        "messageTemplate": "{{messageTemplate}}",
+                        "placeHolders":[]
+                      }
+                      """;
+        var requestContent = new StringContent(request, Encoding.UTF8, "application/json");
+
+        // Act
+
+        var response = await httpClient.PostAsync("/api/clients/101/campaigns", requestContent);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        _outputHelper.WriteLine("[Status code - {0}]: {1}", response.StatusCode,responseContent);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }

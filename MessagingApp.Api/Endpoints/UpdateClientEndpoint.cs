@@ -24,7 +24,10 @@ public class UpdateClientEndpoint : Endpoint<UpdateClientRequest, ClientViewMode
 
     public override async Task HandleAsync(UpdateClientRequest req, CancellationToken ct)
     {
-        var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == req.Id, ct);
+        var client = await _dbContext.Clients
+                                     .AsNoTracking()
+                                     .FirstOrDefaultAsync(c => c.Id == req.Id, ct);
+        
         if (client is null)
         {
             _logger.LogWarning("Client with Id {Id} not found", req.Id);
@@ -35,7 +38,7 @@ public class UpdateClientEndpoint : Endpoint<UpdateClientRequest, ClientViewMode
         client.Name = req.Name;
 
         _logger.LogInformation("Updating client {@Client}", client);
-        
+
         await _dbContext.SaveChangesAsync(ct);
         await SendAsync(client.Adapt<ClientViewModel>(), cancellation: ct);
     }
