@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="microsoft.entityframeworkcore.relational" Version="7.0.0-preview.5.*" />
+      <ProjectReference Include="..\MessagingApp.Infrastructure\MessagingApp.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     </ItemGroup>
 
 </Project>

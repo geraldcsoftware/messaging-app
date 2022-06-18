@@ -11,7 +11,7 @@ public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
         builder.ToTable("Clients");
 
         builder.HasKey(c => c.Id);
-
+        builder.Property(x => x.Id).IsRequired().HasMaxLength(50).IsUnicode(false);
         builder.Property(c => c.Name).IsUnicode().IsRequired().HasMaxLength(400);
     }
 }

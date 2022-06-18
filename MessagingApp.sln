@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingApp.Tests", "Messa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingApp.Infrastructure", "MessagingApp.Infrastructure\MessagingApp.Infrastructure.csproj", "{FE3B2A1D-18F3-4627-BC19-556BBE3898FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingApp.Scheduling", "MessagingApp.Scheduling\MessagingApp.Scheduling.csproj", "{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +60,17 @@ Global
 		{FE3B2A1D-18F3-4627-BC19-556BBE3898FC}.Release|x64.Build.0 = Release|Any CPU
 		{FE3B2A1D-18F3-4627-BC19-556BBE3898FC}.Release|x86.ActiveCfg = Release|Any CPU
 		{FE3B2A1D-18F3-4627-BC19-556BBE3898FC}.Release|x86.Build.0 = Release|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Release|x64.Build.0 = Release|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2D2E0C3-F263-4B18-AF19-7A981ACBEEC2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
