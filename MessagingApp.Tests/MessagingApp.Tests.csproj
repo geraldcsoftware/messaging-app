@@ -11,9 +11,9 @@
     <ItemGroup>
         <PackageReference Include="bogus" Version="34.0.2" />
         <PackageReference Include="fluentassertions" Version="6.7.0" />
-        <PackageReference Include="microsoft.aspnetcore.mvc.testing" Version="7.0.0-preview.5.*" />
-        <PackageReference Include="microsoft.entityframeworkcore.inmemory" Version="7.0.0-preview.5.*" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+        <PackageReference Include="microsoft.aspnetcore.mvc.testing" Version="7.0.0-preview.6.22330.3" />
+        <PackageReference Include="microsoft.entityframeworkcore.inmemory" Version="7.0.0-preview.6.22329.4" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0-preview-20220707-01" />
         <PackageReference Include="moq" Version="4.18.1" />
         <PackageReference Include="xunit" Version="2.4.2-pre.12" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">

@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>Preview</LangVersion>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\MessagingApp.Infrastructure\MessagingApp.Infrastructure.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MessagingApp.Infrastructure\MessagingApp.Infrastructure.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+  </ItemGroup>
 
 </Project>
